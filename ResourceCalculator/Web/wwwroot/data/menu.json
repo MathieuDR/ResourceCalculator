@@ -1,0 +1,15 @@
+﻿[
+  {
+    "path": "/dashboard",
+    "name": "Dashboard",
+    "key": "dashboard",
+    "icon": "dashboard",
+    "children": [
+      {
+        "path": "/",
+        "name": "Home",
+        "key": "dashboard.analysis"
+      }
+    ]
+  }
+]
