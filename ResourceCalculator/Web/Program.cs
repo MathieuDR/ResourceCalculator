@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Web.Services.Repositories;
 
@@ -29,6 +30,7 @@ namespace Web {
                 builder.Services.AddBlazoredLocalStorage();
                 builder.Services.Configure<ProSettings>(
                     builder.Configuration.GetSection("ProSettings")); // From wwwroot/appsettings
+                builder.Logging.ClearProviders();
                 builder.Logging.AddSerilog();
 
                 await builder.Build().RunAsync();
