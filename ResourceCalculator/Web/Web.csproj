@@ -1,98 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
-    <TargetFramework>net5</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5</TargetFramework>
+        <RazorLangVersion>3.0</RazorLangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AntDesign.Charts" Version="0.2.1" />
-    <PackageReference Include="AntDesign.ProLayout" Version="0.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AntDesign.Charts" Version="0.2.1" />
+        <PackageReference Include="AntDesign.ProLayout" Version="0.1.0" />
+        <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+        <PackageReference Include="FluentResults" Version="3.0.0" />
+        <PackageReference Include="MathieuDR.Common" Version="1.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+        <PackageReference Include="Serilog" Version="2.10.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="1.0.0" />
+        <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+        <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\data\activities.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\advanced.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\basic.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\current_user.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\fake_chart_data.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\fake_list.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\menu.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\notice.json" />
-    <_ContentIncludedByDefault Remove="wwwroot\data\notices.json" />
-    <_ContentIncludedByDefault Remove="Pages\Result\Fail\Fail.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Profile\Advanced\Advanced.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Profile\Basic\Basic.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\BasicList\BasicList.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\CardList\CardList.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\Applications\Applications.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\Applications\Components\StandardFormRow\StandardFormRow.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\Applications\Components\TagSelect\TagSelect.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\Applications\Components\TagSelect\TagSelectOption.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\Articles\Articles.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\Projects\Projects.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\Search\SearchList.razor" />
-    <_ContentIncludedByDefault Remove="Pages\List\TableList\TableList.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Form\AdvancedForm\AdvancedForm.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Form\BasicForm\BasicForm.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Form\StepForm\Components\Step1\Step1.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Form\StepForm\Components\Step2\Step2.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Form\StepForm\Components\Step3\Step3.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Form\StepForm\StepForm.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\Applications\Applications.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\ArticleListContent\ArticleListContent.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\Articles\Articles.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\AvatarList\AvatarList.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\AvatarList\AvatarListItem.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\Projects\Projects.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Center\Index.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Components\BaseView.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Components\BindingView.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Components\GeographicView.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Components\NotificationView.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Components\PhoneView.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Components\SecurityView.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Account\Settings\Index.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\ActiveChart\ActiveChart.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Gauge\Gauge.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Map\Map.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Map\MiniArea.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Pie\Pie.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\TagCloud\TagCloud.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\WaterWave\WaterWave.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Index.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Components\EditableLinkGroup\EditableLinkGroup.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Components\Radar\AutoHeight.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Components\Radar\Radar.razor" />
-    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Index.razor" />
-    <_ContentIncludedByDefault Remove="Components\GlobalHeader\RightContent.razor" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Pages\Dashboard\Analysis\Components" />
+        <Folder Include="Pages\Result" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Dashboard\Analysis\Components" />
-    <Folder Include="Pages\Result" />
-  </ItemGroup>
+    <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And !Exists('$(SolutionDir)node_modules') ">
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec WorkingDirectory="$(ProjectDir)" Command="npm install" />
+    </Target>
 
-  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And !Exists('$(SolutionDir)node_modules') ">
-    <!-- Ensure Node.js is installed -->
-    <Exec Command="node --version" ContinueOnError="true">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
-    </Exec>
-    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
-    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-    <Exec WorkingDirectory="$(SolutionDir)/Web/" Command="npm install" />
-  </Target>
+    <Target Name="DebugRunGulp" BeforeTargets="DebugEnsureNodeEnv" Condition=" '$(Configuration)' == 'Debug' And Exists('$(SolutionDir)node_modules') ">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="npm run gulp:pro" />
+    </Target>
 
-  <Target Name="DebugRunGulp" BeforeTargets="DebugEnsureNodeEnv" Condition=" '$(Configuration)' == 'Debug' And Exists('$(SolutionDir)node_modules') ">
-    <Exec WorkingDirectory="$(SolutionDir)/Web/" Command="npm run gulp:pro" />
-  </Target>
+    <Target Name="PublishRunGulp" AfterTargets="ComputeFilesToPublish">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="npm install" />
+        <Exec WorkingDirectory="$(ProjectDir)" Command="npm run gulp:pro" />
+    </Target>
 
-  <Target Name="PublishRunGulp" AfterTargets="ComputeFilesToPublish">
-    <Exec WorkingDirectory="$(SolutionDir)/Web/" Command="npm install" />
-    <Exec WorkingDirectory="$(SolutionDir)/Web/" Command="npm run gulp:pro" />
-  </Target>
+    <ItemGroup>
+        <!-- extends watching group to include *.js files -->
+        <Watch Include="**\*.js" Exclude="node_modules\**\*;**\*.js.map;obj\**\*;bin\**\*" />
+        <Watch Include="**\*.css" />
+        <Watch Include="**\*.ts" />
+    </ItemGroup>
 </Project>

@@ -11,5 +11,11 @@
         "key": "dashboard.analysis"
       }
     ]
+  },
+  {
+    "path": "/welcome",
+    "name": "Welcome",
+    "key": "Welcome",
+    "icon": "dashboard"    
   }
 ]

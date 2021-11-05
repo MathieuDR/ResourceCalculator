@@ -1,34 +1,51 @@
 @namespace Web.Pages.Dashboard.Analysis
 @page "/"
 
-<GridContent>
-    <Row Type="flex" Gutter="(12, 24)">
-         <Col Span="6" />
-          <Col Span="6" />
-          <Col Span="6" />
-          <Col Span="6" />
-        
-          <Col Span="6" />
-          <Col Span="6" />
-          <Col Span="6" />
-         <Col Span="6" />
-          <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-         
-           <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-         <Col Span="6" />
-          <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-         
-           <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-           <Col Span="6" />
-    </Row>
-</GridContent>
+<PageContainer Title="Test">
+    <GridContent>
+        <Row Type="flex">
+            <AntDesign.Col>
+                <Title Level="1">
+                    Create machine
+                </Title>
+            </AntDesign.Col>
+        </Row>
+        <Row>
+            <AntDesign.Col>
+                <Form Layout="@FormLayout.Horizontal"
+                      Model="@_machine"
+                      OnFinish="OnFinish"
+                      OnFinishFailed="OnFinishFailed">
+                    <FormItem Label="Machine name">
+                        <Input @bind-Value="@context.Name" />
+                    </FormItem>
+                    
+                    <FormItem WrapperCol="new ColLayoutParam {Offset = 4, Span = 14}">
+                        <Button Type="@ButtonType.Primary" HtmlType="submit">
+                            Submit
+                        </Button>
+                    </FormItem>
+                </Form>
+            </AntDesign.Col>
+        </Row>
+        <Row Type="flex">
+            <AntDesign.Col>
+                <Title Level="1">
+                    All machines
+                </Title>
+            </AntDesign.Col>
+        </Row>
+        <Row Type="flex">
+                <AntDesign.Col>
+                    <AntList Bordered DataSource="@_machines" Size="small">
+                        <Header>Machines</Header>
+                        <ChildContent Context="item">
+                            <ListItem>
+                                <span>@item.Name</span>
+                            </ListItem>
+                        </ChildContent>
+                    </AntList>
+                </AntDesign.Col>
+            </Row>
+    </GridContent>
+</PageContainer>
