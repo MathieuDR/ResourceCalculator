@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Services.Models {
-    public abstract class Entity {
-        public Guid Id { get; } = Guid.NewGuid();
+    public abstract record Entity {
+        public Guid Id { get; init; } = Guid.NewGuid();
     }
 }

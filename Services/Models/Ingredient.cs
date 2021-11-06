@@ -1,6 +1,6 @@
 ﻿namespace Services.Models {
-    public class Ingredient : Entity {
-        public string Name { get; set; }
-        public string Quantity { get; set; }
+    public record Ingredient : Entity {
+        public string Name { get; init; }
+        public string Quantity { get; init; }
     }
 }

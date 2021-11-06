@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Services.Models {
-    public class Machine : Entity {
+    public record Machine : Entity {
         [Required]
-        public string Name { get; set; }
+        public string Name { get; init; }
     }
 }

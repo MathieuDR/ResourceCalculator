@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
 namespace Services.Models {
-    public class Recipe : Entity {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
-        public MachineStep Processor { get; set; }
+    public record Recipe : Entity {
+        public string Name { get; init; }
+        public string Description { get; init; }
+        public List<Ingredient> Ingredients { get; init; }
+        public MachineStep Processor { get; init; }
     }
 }
