@@ -1,0 +1,68 @@
+@page "/"
+@using Common.Extensions
+<ListGroup Flush="true">
+    @foreach(var machine in Machines){
+        <ListGroupItem>
+            <Div Flex="Flex.JustifyContent.Between" Width="Width.Is100">
+                <Heading Size="HeadingSize.Is5" Margin="Margin.Is1.FromBottom">@machine.Name</Heading>
+            </Div>
+            <Small>@machine.Id</Small>
+        </ListGroupItem>
+    }
+</ListGroup>
+
+<Button Color="Color.Primary" Block="true" Clicked="OnReload">Blocked primary</Button>
+
+<Heading Size="HeadingSize.Is2">Add machine</Heading>
+<Field>
+    <FieldLabel>Machine name</FieldLabel>
+    <Addons>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit Placeholder="Machine name" @bind-Text="MachineName" />
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <Button Color="Color.Primary" Disabled="@string.IsNullOrEmpty(MachineName)" Clicked="AddMachine">Add</Button>
+        </Addon>
+    </Addons>
+</Field>
+
+@code{
+
+    public List<Machine> Machines { get; set; } = new List<Machine>();
+
+    public string MachineName { get; set; }
+
+    [Inject]
+    public IMachineService MachineService { get; set; }
+    
+    [Inject] 
+    INotificationService NotificationService { get; set; }
+
+
+    private async Task OnReload() {
+        Machines = (await MachineService.GetMachines()).Value.ToList();
+    }
+
+    private async Task AddMachine() {
+        if(!string.IsNullOrEmpty(MachineName)) {
+            var machine = new Machine {
+                Name = MachineName
+            };
+            
+        
+            var result = await MachineService.AddMachine(machine);
+            if (!result.IsSuccess) {
+                _ = NotificationService.Error(result.CombineMessage(), "Could not add machine");
+                return;
+            }
+
+            Machines.Add(result.Value);
+            MachineName = string.Empty;
+            _ = NotificationService.Success("Machine added");
+            return;
+        }
+        
+        _ = NotificationService.Warning("Machine name is empty");
+    }
+
+}
