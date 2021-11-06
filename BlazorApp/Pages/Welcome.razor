@@ -1,7 +1,7 @@
 @page "/"
 @using Common.Extensions
 <ListGroup Flush="true">
-    @foreach(var machine in Machines){
+    @foreach (var machine in Machines) {
         <ListGroupItem>
             <Div Flex="Flex.JustifyContent.Between" Width="Width.Is100">
                 <Heading Size="HeadingSize.Is5" Margin="Margin.Is1.FromBottom">@machine.Name</Heading>
@@ -18,7 +18,7 @@
     <FieldLabel>Machine name</FieldLabel>
     <Addons>
         <Addon AddonType="AddonType.Body">
-            <TextEdit Placeholder="Machine name" @bind-Text="MachineName" />
+            <TextEdit Placeholder="Machine name" @bind-Text="MachineName"/>
         </Addon>
         <Addon AddonType="AddonType.End">
             <Button Color="Color.Primary" Disabled="@string.IsNullOrEmpty(MachineName)" Clicked="AddMachine">Add</Button>
@@ -28,28 +28,40 @@
 
 @code{
 
-    public List<Machine> Machines { get; set; } = new List<Machine>();
+    private List<Machine> Machines { get; set; } = new();
 
-    public string MachineName { get; set; }
+    private string MachineName { get; set; }
 
     [Inject]
     public IMachineService MachineService { get; set; }
-    
-    [Inject] 
+
+    [Inject]
     INotificationService NotificationService { get; set; }
 
+    protected override async Task OnInitializedAsync() {
+        var machinesResult = await MachineService.GetMachines();
+
+        if (machinesResult.IsSuccess) {
+            Machines = machinesResult.Value.ToList();
+        } else {
+            _ = NotificationService.Error(machinesResult.CombineMessage(), "Could not load machines");
+        }
+        
+        await base.OnInitializedAsync();
+    }
 
     private async Task OnReload() {
         Machines = (await MachineService.GetMachines()).Value.ToList();
     }
 
     private async Task AddMachine() {
-        if(!string.IsNullOrEmpty(MachineName)) {
-            var machine = new Machine {
+        if (!string.IsNullOrEmpty(MachineName)) {
+            var machine = new Machine
+            {
                 Name = MachineName
             };
-            
-        
+
+
             var result = await MachineService.AddMachine(machine);
             if (!result.IsSuccess) {
                 _ = NotificationService.Error(result.CombineMessage(), "Could not add machine");
@@ -61,7 +73,7 @@
             _ = NotificationService.Success("Machine added");
             return;
         }
-        
+
         _ = NotificationService.Warning("Machine name is empty");
     }
 
