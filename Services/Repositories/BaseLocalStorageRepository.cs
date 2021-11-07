@@ -61,10 +61,26 @@ namespace Services.Repositories {
 
             return entity;
         }
+        
+        public async Task Add(IEnumerable<T> entities) {
+            var entitiesArr = entities as T[] ?? entities.ToArray();
+            var keyTask = AddKeys(entitiesArr);
+            foreach (var entity in entitiesArr) {
+                 await LocalStorageService.SetItemAsync(GetKey(entity.Id), entity);
+            }
+
+            await keyTask;
+        }
 
         private async Task AddKey(T entity) {
             var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
             keys.Add(entity.Id);
+            await LocalStorageService.SetItemAsync(KeysKey, keys.ToArray());
+        }
+        
+        private async Task AddKeys(IEnumerable<T> entity) {
+            var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
+            keys.AddRange(entity.Select(x=>x.Id));
             await LocalStorageService.SetItemAsync(KeysKey, keys.ToArray());
         }
 
@@ -108,8 +124,15 @@ namespace Services.Repositories {
             return Delete(entity.Id);
         }
 
+        public async Task<bool> SeedDatabase(T[] entities) {
+            await Add(entities);
+            return true;
+        }
+
         protected async Task<IEnumerable<Guid>> GetAllKeys() {
-            return await LocalStorageService.GetItemAsync<IEnumerable<Guid>>(KeysKey);
+            var keys = (await LocalStorageService.GetItemAsync<IEnumerable<Guid>>(KeysKey) ?? Array.Empty<Guid>()).ToList();
+            Logger.LogInformation("Keys: " + string.Join(", ", keys.Select(x=>x.ToString())));
+            return keys;
         }
 
         // checks it em exists

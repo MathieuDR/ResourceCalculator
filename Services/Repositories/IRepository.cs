@@ -15,5 +15,7 @@ namespace Services.Repositories {
 
         Task<bool> Delete(Guid id);
         Task<bool> Delete(T entity);
+        
+        Task<bool> SeedDatabase(T[] entities);
     }
 }

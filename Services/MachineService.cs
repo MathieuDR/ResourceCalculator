@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Common.Extensions;
 using FluentResults;
 using Microsoft.Extensions.Logging;
 using Services.Models;
@@ -14,9 +15,11 @@ namespace Services {
         public MachineService(IMachineRepository machineRepository, ILogger<MachineService> logger) {
             _machineRepository = machineRepository;
             _logger = logger;
-        }
 
-        public async Task<Result<Machine>> GetMachine(Guid id) {
+            _ = SeedDatabase(); // Fire and forget
+        }
+        
+       public async Task<Result<Machine>> GetMachine(Guid id) {
             _logger.LogInformation("Getting machine with id {id}", id);
             var machine = await _machineRepository.Get(id);
 
@@ -63,6 +66,18 @@ namespace Services {
 
             var result = await _machineRepository.Delete(id);
             return result ? Result.Ok() : Result.Fail("Machine not deleted");
+        }
+        
+        // seed database
+        private async Task<Result> SeedDatabase() {
+            _logger.LogInformation("Seeding");
+            
+            var result = await _machineRepository.SeedDatabase();
+
+            if (result.IsFailed) {
+                _logger.LogError("Seeding failed: "+ result.CombineMessage());
+            }
+            return result;
         }
     }
 }

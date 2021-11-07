@@ -1,5 +1,9 @@
-@page "/"
+@page "/welcome"
 @using Common.Extensions
+@using Microsoft.Extensions.Logging
+@using Blazored.LocalStorage
+@inject ILocalStorageService localStorage
+
 <ListGroup Flush="true">
     @foreach (var machine in Machines) {
         <ListGroupItem>
@@ -28,29 +32,52 @@
 
 @code{
 
+    // [Inject]
+    // private IJSRuntime _jSRuntime { get; set; }
+    //
     private List<Machine> Machines { get; set; } = new();
 
     private string MachineName { get; set; }
-
+    //
     [Inject]
     public IMachineService MachineService { get; set; }
 
     [Inject]
     INotificationService NotificationService { get; set; }
+    
+    // inject logger
+    [Inject]
+    ILogger<Welcome> Logger { get; set; }
+
 
     protected override async Task OnInitializedAsync() {
-        var machinesResult = await MachineService.GetMachines();
+      
+        localStorage.Changed += (sender, e) =>
+        {
+            Console.WriteLine($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
+        };
+            
+            //var keys = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", CancellationToken.None, "Machine_keys");
+            //Logger.LogInformation(keys);
+            
+            Logger.LogInformation("In OnInitializedAsync");
+            var machinesResult = await MachineService.GetMachines();
 
-        if (machinesResult.IsSuccess) {
-            Machines = machinesResult.Value.ToList();
-        } else {
-            _ = NotificationService.Error(machinesResult.CombineMessage(), "Could not load machines");
-        }
+            if (machinesResult.IsSuccess) {
+                Machines = machinesResult.Value.ToList();
+                Logger.LogInformation(Machines.Count + " machines found");
+            }
+            else {
+                _ = NotificationService.Error(machinesResult.CombineMessage(), "Could not load machines");
+            }
+       
         
-        await base.OnInitializedAsync();
+       
     }
 
     private async Task OnReload() {
+        //var keys = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", CancellationToken.None, "Machine_keys");
+        //Logger.LogInformation(keys);
         Machines = (await MachineService.GetMachines()).Value.ToList();
     }
 
