@@ -55,6 +55,12 @@ namespace Services.Repositories {
         }
 
         public async Task<T> Add(T entity) {
+            if (entity.Id != Guid.Empty) {
+                Logger.LogError("Trying to insert entity {entity} which has the id {id}", entity, entity.Id);
+                throw new ArgumentException("Cannot insert entity with an Id");
+            }
+
+            entity = entity with { Id = Guid.NewGuid() };
             LocalStorageService.SetItem(GetKey(entity.Id), entity);
             await AddKey(entity);
 
@@ -63,12 +69,9 @@ namespace Services.Repositories {
         
         public async Task Add(IEnumerable<T> entities) {
             var entitiesArr = entities as T[] ?? entities.ToArray();
-            var keyTask = AddKeys(entitiesArr);
-            foreach (var entity in entitiesArr) {
-                 LocalStorageService.SetItem(GetKey(entity.Id), entity);
-            }
+            var tasks = entitiesArr.Select(entity => Add(entity)).ToList();
 
-            await keyTask;
+            await Task.WhenAll(tasks);
         }
 
         private async Task AddKey(T entity) {
@@ -77,12 +80,6 @@ namespace Services.Repositories {
             LocalStorageService.SetItem(KeysKey, keys.ToArray());
         }
         
-        private async Task AddKeys(IEnumerable<T> entity) {
-            var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
-            keys.AddRange(entity.Select(x=>x.Id));
-            LocalStorageService.SetItem(KeysKey, keys.ToArray());
-        }
-
         // remove key
         public async Task Remove(Guid id) {
             var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
@@ -124,7 +121,10 @@ namespace Services.Repositories {
         }
 
         public async Task<bool> SeedDatabase(T[] entities) {
-            await Add(entities);
+            var inDb = (await GetAll()).Select(x=> x with { Id = Guid.Empty }).ToList();
+            var toInsert = entities.Except(inDb);
+            
+            await Add(toInsert);
             return true;
         }
 

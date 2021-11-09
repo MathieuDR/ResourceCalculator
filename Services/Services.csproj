@@ -4,6 +4,10 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DebugType>full</DebugType>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
         <PackageReference Include="FluentResults" Version="3.0.0" />
