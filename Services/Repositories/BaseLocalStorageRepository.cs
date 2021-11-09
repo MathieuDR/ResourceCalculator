@@ -10,18 +10,18 @@ namespace Services.Repositories {
     internal abstract class BaseLocalStorageRepository<T> : IRepository<T> where T : Entity {
         protected readonly string KeySuffix = "keys";
         protected ILogger Logger { get; }
-        protected ILocalStorageService LocalStorageService { get; }
+        protected ISyncLocalStorageService LocalStorageService { get; }
 
         protected abstract string RepositoryPrefix { get; }
         protected string KeysKey => $"{RepositoryPrefix}_{KeySuffix}";
 
-        public BaseLocalStorageRepository(ILogger logger, ILocalStorageService localStorageService) {
+        public BaseLocalStorageRepository(ILogger logger, ISyncLocalStorageService localStorageService) {
             Logger = logger;
             LocalStorageService = localStorageService;
         }
 
         public Task<T> Get(Guid id) {
-            return LocalStorageService.GetItemAsync<T>(GetKey(id)).AsTask();
+            return Task.FromResult(LocalStorageService.GetItem<T>(GetKey(id)));
         }
 
         public async Task<IEnumerable<T>> GetAll() {
@@ -55,9 +55,8 @@ namespace Services.Repositories {
         }
 
         public async Task<T> Add(T entity) {
-            var task = LocalStorageService.SetItemAsync(GetKey(entity.Id), entity);
+            LocalStorageService.SetItem(GetKey(entity.Id), entity);
             await AddKey(entity);
-            await task;
 
             return entity;
         }
@@ -66,7 +65,7 @@ namespace Services.Repositories {
             var entitiesArr = entities as T[] ?? entities.ToArray();
             var keyTask = AddKeys(entitiesArr);
             foreach (var entity in entitiesArr) {
-                 await LocalStorageService.SetItemAsync(GetKey(entity.Id), entity);
+                 LocalStorageService.SetItem(GetKey(entity.Id), entity);
             }
 
             await keyTask;
@@ -75,26 +74,26 @@ namespace Services.Repositories {
         private async Task AddKey(T entity) {
             var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
             keys.Add(entity.Id);
-            await LocalStorageService.SetItemAsync(KeysKey, keys.ToArray());
+            LocalStorageService.SetItem(KeysKey, keys.ToArray());
         }
         
         private async Task AddKeys(IEnumerable<T> entity) {
             var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
             keys.AddRange(entity.Select(x=>x.Id));
-            await LocalStorageService.SetItemAsync(KeysKey, keys.ToArray());
+            LocalStorageService.SetItem(KeysKey, keys.ToArray());
         }
 
         // remove key
         public async Task Remove(Guid id) {
             var keys = (await GetAllKeys() ?? Array.Empty<Guid>()).ToList();
             keys.Remove(id);
-            await LocalStorageService.SetItemAsync(KeysKey, keys.ToArray());
-            await LocalStorageService.RemoveItemAsync(GetKey(id));
+            LocalStorageService.SetItem(KeysKey, keys.ToArray());
+            LocalStorageService.RemoveItem(GetKey(id));
         }
 
-        public async Task<T> Update(T entity) {
-            await LocalStorageService.SetItemAsync(GetKey(entity.Id), entity);
-            return entity;
+        public Task<T> Update(T entity) {
+            LocalStorageService.SetItem(GetKey(entity.Id), entity);
+            return Task.FromResult(entity);
         }
 
         public async Task<T> Upsert(T entity) {
@@ -114,8 +113,8 @@ namespace Services.Repositories {
             }
 
             keys.Remove(id);
-            await LocalStorageService.SetItemAsync(KeysKey, keys.ToArray());
-            await LocalStorageService.RemoveItemAsync(GetKey(id));
+            LocalStorageService.SetItem(KeysKey, keys.ToArray());
+            LocalStorageService.RemoveItem(GetKey(id));
 
             return true;
         }
@@ -130,14 +129,14 @@ namespace Services.Repositories {
         }
 
         protected async Task<IEnumerable<Guid>> GetAllKeys() {
-            var keys = (await LocalStorageService.GetItemAsync<IEnumerable<Guid>>(KeysKey) ?? Array.Empty<Guid>()).ToList();
+            var keys = (LocalStorageService.GetItem<IEnumerable<Guid>>(KeysKey) ?? Array.Empty<Guid>()).ToList();
             Logger.LogInformation("Keys: " + string.Join(", ", keys.Select(x=>x.ToString())));
             return keys;
         }
 
         // checks it em exists
         protected Task<bool> Exists(Guid id) {
-            return LocalStorageService.ContainKeyAsync(GetKey(id)).AsTask();
+            return Task.FromResult(LocalStorageService.ContainKey(GetKey(id)));
         }
 
         protected string GetKey(Guid id) {

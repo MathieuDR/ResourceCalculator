@@ -7,7 +7,7 @@ using Services.Models;
 
 namespace Services.Repositories {
     internal class MachineRepository : BaseLocalStorageRepository<Machine>, IMachineRepository {
-        public MachineRepository(ILogger<MachineRepository> logger, ILocalStorageService localStorageService) : base(
+        public MachineRepository(ILogger<MachineRepository> logger, ISyncLocalStorageService localStorageService) : base(
             logger, localStorageService) {
         }
 
