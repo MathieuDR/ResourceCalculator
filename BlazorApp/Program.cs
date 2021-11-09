@@ -29,9 +29,6 @@ namespace BlazorApp {
                     { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
                 builder.Services.AddResourceCalculatorServices(builder.Configuration);
 
-                builder.Services.AddScoped<StupidService>();
-                builder.Services.AddScoped<Repository>();
-
                 builder.Logging.ClearProviders();
                 builder.Logging.AddSerilog();
 
