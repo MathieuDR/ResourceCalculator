@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Repositories;
@@ -17,6 +18,7 @@ namespace Services.Configuration {
         //private method to add repositories services
         private static IServiceCollection AddRepositoriesServices(this IServiceCollection services) {
             services.AddBlazoredLocalStorage();
+            services.AddBlazoredSessionStorage();
             services.AddScoped<IMachineRepository, MachineRepository>();
 
             return services;
